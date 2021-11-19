@@ -36,16 +36,16 @@ ggplot(MayOct, aes(fill=Month, y=EC, x=reorder(SiteID, -EC)))+
 
 #Assign Flowing/Pond to sites. Update the code as new sites are added/rotated through
 
-MayOct <- MayOct %>% 
+Oct2021 <- Oct2021 %>% 
   mutate(Flow = if_else(SiteID == "WIP002" | SiteID == "WIP003" | SiteID == "NER002" | SiteID =="NER075" | SiteID=="MMB106", "Pond", "Flowing"))
 
-Pond<-filter(MayOct, Flow == "Pond")
-Flowing<-filter(MayOct, Flow == "Flowing")
+Pond<-filter(Oct2021, Flow == "Pond")
+Flowing<-filter(Oct2021, Flow == "Flowing")
 
 flowing<-ggplot(Flowing, aes(fill=Month, y=TP, x=reorder(SiteID, -TP)))+
   geom_hline(aes(yintercept= .05, linetype = "Flows into Lake/Reservoir"), colour= 'yellow', size=1.2) +
   geom_hline(aes(yintercept= .1, linetype = "Flowing Water"), colour= 'gold', size=1.2) +
-  theme(legend.position = c(.75, .8))+ ylim(0,.55)+
+  theme(legend.position = c(.75, .8))+ ylim(0,.3)+
   scale_linetype_manual(name = "TP Standards", values = c(1, 1),
                         guide = guide_legend(override.aes = list(color = c("orange", "yellow"))))+
   geom_bar(position="dodge", stat="identity", width=0.5)+
@@ -55,11 +55,13 @@ flowing<-ggplot(Flowing, aes(fill=Month, y=TP, x=reorder(SiteID, -TP)))+
   theme(text = element_text(family = "A"))+
   theme(legend.margin = margin(0.2, 0.6, 0.2, .2, "cm"))+
   theme(legend.background = element_rect(fill = "white", linetype=0))+
-  theme(text=element_text(size=15))+ guides(fill = "none")
+  theme(text=element_text(size=15))+ guides(fill = "none")+
+  geom_text(x=36, y=.1, label="No sample collected", angle=90, size=4, color="grey")  ##Adjust/skip as needed
+
 
 pond<-ggplot(Pond, aes(fill=Month, y=TP, x=reorder(SiteID, -TP)))+
   geom_hline(aes(yintercept= .025, linetype = "Pond"), colour= 'green', size=1.2) +
-  theme(legend.position = c(.4, 0.85))+ ylim(0,.55)+
+  theme(legend.position = c(.53, 0.85))+ ylim(0,.3)+
   scale_linetype_manual(values = c(1),
                         guide = guide_legend(override.aes = list(color = c("green"))))+
   geom_bar(position="dodge", stat="identity", width=0.5)+
@@ -67,7 +69,7 @@ pond<-ggplot(Pond, aes(fill=Month, y=TP, x=reorder(SiteID, -TP)))+
   labs(y=" ", x = " ")+theme(legend.title = element_blank())+
   scale_fill_manual("Month", values = c("September" = "darkgray"))+
   theme(text = element_text(family = "A"))+
-  theme(legend.margin = margin(0.2, 0.3, 0.2, 0, "cm"))+
+  theme(legend.margin = margin(0.1, 0.4, 0.2, 0.2, "cm"))+
   theme(text=element_text(size=15))+ guides(fill = "none")
 
 ggdraw() +
@@ -76,7 +78,7 @@ ggdraw() +
 
 ##Plot DOMgL for all sites
 
-ggplot(MayOct, aes(fill=Month, y=DOMgL, x=reorder(SiteID, -DOMgL)))+
+ggplot(Oct2021, aes(fill=Month, y=DOMgL, x=reorder(SiteID, -DOMgL)))+
   geom_hline(aes(yintercept= 6, linetype = "Cold Water Fish"), colour= 'green', size=1.2) +
   geom_hline(aes(yintercept= 5, linetype = "Warm Water Fish"), colour= 'gold', size=1.2) +
   scale_linetype_manual(name = "Dissolved Oxygen Standards", values = c( 1, 1), 
@@ -86,8 +88,7 @@ ggplot(MayOct, aes(fill=Month, y=DOMgL, x=reorder(SiteID, -DOMgL)))+
   labs(y="Dissolved Oxygen, mg/L", x = " ")+theme(legend.position = c(0.75, 0.80))+
   scale_fill_manual("Month", values = c("September" = "darkgray"))+
   theme(text = element_text(family = "A"))+
-  theme(text=element_text(size=20))+ guides(fill = "none")
-##+
+  theme(text=element_text(size=15))+ guides(fill = "none")+
   geom_text(x=41, y=6, label="No Data Collected", angle=90, size=4, color="grey")+
   geom_text(x=40, y=6, label="Awaiting Data", angle=90, size=4, color="grey")+
   geom_text(x=39, y=6, label="Awaiting Data", angle=90, size=4, color="grey")+
